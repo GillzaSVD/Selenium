@@ -1,7 +1,5 @@
 from selenium import webdriver
-from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 
 import time
 import getpass
@@ -12,7 +10,7 @@ password = getpass.getpass("Введите пароль: ")
 
 driver = webdriver.Firefox(executable_path='geckodriver.exe')
 driver.get("https://nstu.ru")
-time.sleep(2)
+time.sleep(1)
 
 # найдем кнопку Войти
 btn_login = driver.find_element_by_css_selector("div.header__login>a")
@@ -42,22 +40,14 @@ btn_uspev.click()
 time.sleep(1)
 btn_uspev2 = driver.find_element_by_xpath('//div[text() = "Результаты сессии"]')
 btn_uspev2.click()
-time.sleep(2)
+time.sleep(1)
 
-# получение список
-'''html = driver.page_source
-soup = BeautifulSoup(html,'html.parser')
-div = soup.find('table', class_='tdall')
-trs = div.find_elements_by_css_selector('tbody>tr.all_progress')
-
-for tr in trs:
-    #tds = tr.find_all('td:nth-child(2)')
-    #print(tds[1].text.strip())
-    print(tr)
-    print('----')
-   '''
-trs = driver.find_elements_by_css_selector("table.tdall:first-child>tbody>tr.all_progress>td:nth-child(2)")   
-for tr in trs:
-    print(tr.text)
+tables = driver.find_elements_by_css_selector(".sysContentWithMenu>table>tbody")   
+for table in tables:
+    tds = table.find_elements_by_css_selector('tr.all_progress>td.tdbr:nth-child(2)')
+    j = 0
+    for td in tds:
+        print(td.text)
+    break
 time.sleep(10)
 driver.close()
